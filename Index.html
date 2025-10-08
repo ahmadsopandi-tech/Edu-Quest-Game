@@ -1,0 +1,2048 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduQuest - Game Edukasi Interaktif</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #6C63FF;
+            --secondary-color: #FF6584;
+            --accent-color: #4ECDC4;
+            --dark-color: #2D3561;
+            --light-color: #F7F9FC;
+            --correct-color: #4CAF50;
+            --wrong-color: #F44336;
+            --math-color: #4285F4;
+            --bio-color: #34A853;
+            --history-color: #EA4335;
+            --pjok-color: #FF9800;
+            --ppkn-color: #9C27B0;
+            --ti-color: #00BCD4;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* Splash Screen Styles */
+        .splash-screen {
+            text-align: center;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        .logo {
+            display: inline-block;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .logo i {
+            font-size: 80px;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            display: block;
+            animation: pulse 2s infinite;
+        }
+
+        .logo h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .logo p {
+            font-size: 1.2rem;
+            color: var(--dark-color);
+            opacity: 0.8;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(108, 99, 255, 0.3);
+            margin-top: 30px;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(108, 99, 255, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        /* Category Selection Screen */
+        .category-screen {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .category-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--dark-color);
+        }
+
+        .category-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .category-card {
+            background-color: white;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .category-card.math {
+            border-top: 5px solid var(--math-color);
+        }
+
+        .category-card.bio {
+            border-top: 5px solid var(--bio-color);
+        }
+
+        .category-card.history {
+            border-top: 5px solid var(--history-color);
+        }
+
+        .category-card.pjok {
+            border-top: 5px solid var(--pjok-color);
+        }
+
+        .category-card.ppkn {
+            border-top: 5px solid var(--ppkn-color);
+        }
+
+        .category-card.ti {
+            border-top: 5px solid var(--ti-color);
+        }
+
+        .category-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .category-card.math .category-icon {
+            color: var(--math-color);
+        }
+
+        .category-card.bio .category-icon {
+            color: var(--bio-color);
+        }
+
+        .category-card.history .category-icon {
+            color: var(--history-color);
+        }
+
+        .category-card.pjok .category-icon {
+            color: var(--pjok-color);
+        }
+
+        .category-card.ppkn .category-icon {
+            color: var(--ppkn-color);
+        }
+
+        .category-card.ti .category-icon {
+            color: var(--ti-color);
+        }
+
+        .category-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .category-desc {
+            color: var(--dark-color);
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        .category-count {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        /* Quiz Type Selection Screen */
+        .quiz-type-screen {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .quiz-type-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--dark-color);
+        }
+
+        .quiz-type-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .quiz-type-card {
+            background-color: white;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-type-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .quiz-type-card.multiple {
+            border-top: 5px solid var(--primary-color);
+        }
+
+        .quiz-type-card.matching {
+            border-top: 5px solid var(--secondary-color);
+        }
+
+        .quiz-type-card.essay {
+            border-top: 5px solid var(--accent-color);
+        }
+
+        .quiz-type-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .quiz-type-card.multiple .quiz-type-icon {
+            color: var(--primary-color);
+        }
+
+        .quiz-type-card.matching .quiz-type-icon {
+            color: var(--secondary-color);
+        }
+
+        .quiz-type-card.essay .quiz-type-icon {
+            color: var(--accent-color);
+        }
+
+        .quiz-type-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .quiz-type-desc {
+            color: var(--dark-color);
+            opacity: 0.8;
+        }
+
+        /* Quiz Screen Styles */
+        .quiz-screen {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .quiz-category {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .quiz-category.math {
+            background-color: var(--math-color);
+        }
+
+        .quiz-category.bio {
+            background-color: var(--bio-color);
+        }
+
+        .quiz-category.history {
+            background-color: var(--history-color);
+        }
+
+        .quiz-category.pjok {
+            background-color: var(--pjok-color);
+        }
+
+        .quiz-category.ppkn {
+            background-color: var(--ppkn-color);
+        }
+
+        .quiz-category.ti {
+            background-color: var(--ti-color);
+        }
+
+        .quiz-type {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            color: white;
+            margin-left: 10px;
+        }
+
+        .quiz-type.multiple {
+            background-color: var(--primary-color);
+        }
+
+        .quiz-type.matching {
+            background-color: var(--secondary-color);
+        }
+
+        .quiz-type.essay {
+            background-color: var(--accent-color);
+        }
+
+        .quiz-score {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+
+        .quiz-score i {
+            margin-right: 8px;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background-color: rgba(108, 99, 255, 0.2);
+            border-radius: 10px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .question-container {
+            background-color: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .question-text {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            color: var(--dark-color);
+        }
+
+        .options-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .option-btn {
+            background-color: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 15px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+
+        .option-btn:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .option-btn.correct {
+            background-color: var(--correct-color);
+            color: white;
+            border-color: var(--correct-color);
+        }
+
+        .option-btn.wrong {
+            background-color: var(--wrong-color);
+            color: white;
+            border-color: var(--wrong-color);
+        }
+
+        /* Matching Question Styles */
+        .matching-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .matching-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 15px;
+        }
+
+        .matching-left {
+            flex: 1;
+            font-weight: 600;
+        }
+
+        .matching-right {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .matching-option {
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .matching-option:hover {
+            background-color: #e0e0e0;
+        }
+
+        .matching-option.selected {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* Essay Question Styles */
+        .essay-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .essay-input {
+            width: 100%;
+            min-height: 150px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            resize: vertical;
+        }
+
+        .essay-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .essay-submit {
+            align-self: flex-end;
+            padding: 10px 30px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .essay-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(108, 99, 255, 0.3);
+        }
+
+        /* Result Screen Styles */
+        .result-screen {
+            display: none;
+            text-align: center;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .result-container {
+            background-color: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .result-title {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+
+        .result-score {
+            font-size: 4rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 20px 0;
+        }
+
+        .result-message {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: var(--dark-color);
+        }
+
+        .result-emoji {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            animation: bounce 1s infinite;
+        }
+
+        /* Random Event Styles */
+        .random-event {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .random-event-content {
+            background-color: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .random-event-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: pulse 1.5s infinite;
+        }
+
+        .random-event-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .random-event-description {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            color: var(--dark-color);
+        }
+
+        .random-event-btn {
+            padding: 12px 30px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .random-event-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(108, 99, 255, 0.3);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .logo h1 {
+                font-size: 2.5rem;
+            }
+            
+            .question-text {
+                font-size: 1.2rem;
+            }
+            
+            .options-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .result-score {
+                font-size: 3rem;
+            }
+            
+            .matching-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Splash Screen -->
+        <div class="splash-screen" id="splashScreen">
+            <div class="logo">
+                <i class="fas fa-graduation-cap"></i>
+                <h1>EduQuest</h1>
+                <p>Game Edukasi Interaktif untuk Gen Z</p>
+            </div>
+            <button class="btn" id="startBtn">Mulai Game</button>
+        </div>
+
+        <!-- Category Selection Screen -->
+        <div class="category-screen" id="categoryScreen">
+            <h2 class="category-title">Pilih Mata Pelajaran</h2>
+            <div class="category-container">
+                <div class="category-card math" id="mathCategory">
+                    <div class="category-count">50</div>
+                    <div class="category-icon">
+                        <i class="fas fa-calculator"></i>
+                    </div>
+                    <div class="category-name">Matematika</div>
+                    <div class="category-desc">50 soal tingkat SMA</div>
+                </div>
+                <div class="category-card bio" id="bioCategory">
+                    <div class="category-count">100</div>
+                    <div class="category-icon">
+                        <i class="fas fa-dna"></i>
+                    </div>
+                    <div class="category-name">Biologi</div>
+                    <div class="category-desc">100 soal tingkat SMA</div>
+                </div>
+                <div class="category-card history" id="historyCategory">
+                    <div class="category-count">150</div>
+                    <div class="category-icon">
+                        <i class="fas fa-landmark"></i>
+                    </div>
+                    <div class="category-name">Sejarah</div>
+                    <div class="category-desc">150 soal tingkat SMA</div>
+                </div>
+                <div class="category-card pjok" id="pjokCategory">
+                    <div class="category-count">50</div>
+                    <div class="category-icon">
+                        <i class="fas fa-running"></i>
+                    </div>
+                    <div class="category-name">PJOK</div>
+                    <div class="category-desc">50 soal tingkat SMA</div>
+                </div>
+                <div class="category-card ppkn" id="ppknCategory">
+                    div class="category-count">100</div>
+                    <div class="category-icon">
+                        <i class="fas fa-balance-scale"></i>
+                    </div>
+                    <div class="category-name">PPKn</div>
+                    <div class="category-desc">100 soal tingkat SMA</div>
+                </div>
+                <div class="category-card ti" id="tiCategory">
+                    <div class="category-count">150</div>
+                    <div class="category-icon">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <div class="category-name">Teknologi Informatika</div>
+                    <div class="category-desc">150 soal tingkat SMA</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Type Selection Screen -->
+        <div class="quiz-type-screen" id="quizTypeScreen">
+            <h2 class="quiz-type-title">Pilih Jenis Soal</h2>
+            <div class="quiz-type-container">
+                <div class="quiz-type-card multiple" id="multipleType">
+                    <div class="quiz-type-icon">
+                        <i class="fas fa-list-ul"></i>
+                    </div>
+                    <div class="quiz-type-name">Pilihan Ganda</div>
+                    <div class="quiz-type-desc">Pilih jawaban yang benar</div>
+                </div>
+                <div class="quiz-type-card matching" id="matchingType">
+                    <div class="quiz-type-icon">
+                        <i class="fas fa-link"></i>
+                    </div>
+                    <div class="quiz-type-name">Menjodohkan</div>
+                    <div class="quiz-type-desc">Cocokkan pasangan yang tepat</div>
+                </div>
+                <div class="quiz-type-card essay" id="essayType">
+                    <div class="quiz-type-icon">
+                        <i class="fas fa-pen"></i>
+                    </div>
+                    <div class="quiz-type-name">Essay</div>
+                    <div class="quiz-type-desc">Jawab dengan kata-kata sendiri</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div class="quiz-screen" id="quizScreen">
+            <div class="quiz-header">
+                <div>
+                  <div class="quiz-category" id="categoryDisplay">Matematika</div>
+                    <div class="quiz-type multiple" id="typeDisplay">Pilihan Ganda</div>
+                </div>
+                <div class="quiz-score">
+                    <i class="fas fa-star"></i>
+                    <span id="scoreDisplay">0</span>
+                </div>
+            </div>
+            
+            <div class="progress-bar">
+                <div class="progress" id="progressBar"></div>
+            </div>
+            
+            <div class="question-container">
+                <div class="question-text" id="questionText">Loading question...</div>
+                
+                <!-- Multiple Choice Container -->
+                <div class="options-container" id="optionsContainer">
+                    <!-- Options will be dynamically generated -->
+                </div>
+                
+                <!-- Matching Container -->
+                <div class="matching-container" id="matchingContainer" style="display: none;">
+                    <!-- Matching items will be dynamically generated -->
+                </div>
+                
+                <!-- Essay Container -->
+                <div class="essay-container" id="essayContainer" style="display: none;">
+                    <textarea class="essay-input" id="essayInput" placeholder="Ketik jawaban Anda di sini..."></textarea>
+                    <button class="essay-submit" id="essaySubmit">Kirim Jawaban</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Result Screen -->
+        <div class="result-screen" id="resultScreen">
+            <div class="result-container">
+                <div class="result-emoji" id="resultEmoji">🎉</div>
+                <h2 class="result-title">Permainan Selesai!</h2>
+                <div class="result-score" id="finalScore">0</div>
+                <p class="result-message" id="resultMessage">Great job!</p>
+                <button class="btn" id="playAgainBtn">Main Lagi</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // DOM Elements
+                                  const splashScreen = document.getElementById('splashScreen');
+            const categoryScreen = document.getElementById('categoryScreen');
+            const quizTypeScreen = document.getElementById('quizTypeScreen');
+            const quizScreen = document.getElementById('quizScreen');
+            const resultScreen = document.getElementById('resultScreen');
+            const startBtn = document.getElementById('startBtn');
+            const playAgainBtn = document.getElementById('playAgainBtn');
+            
+            // Category Elements
+            const mathCategory = document.getElementById('mathCategory');
+            const bioCategory = document.getElementById('bioCategory');
+            const historyCategory = document.getElementById('historyCategory');
+            const pjokCategory = document.getElementById('pjokCategory');
+            const ppknCategory = document.getElementById('ppknCategory');
+            const tiCategory = document.getElementById('tiCategory');
+            
+            // Quiz Type Elements
+            const multipleType = document.getElementById('multipleType');
+            const matchingType = document.getElementById('matchingType');
+            const essayType = document.getElementById('essayType');
+            
+            // Quiz Elements
+            const questionText = document.getElementById('questionText');
+            const optionsContainer = document.getElementById('optionsContainer');
+            const matchingContainer = document.getElementById('matchingContainer');
+            const essayContainer = document.getElementById('essayContainer');
+            const essayInput = document.getElementById('essayInput');
+            const essaySubmit = document.getElementById('essaySubmit');
+            const scoreDisplay = document.getElementById('scoreDisplay');
+            const categoryDisplay = document.getElementById('categoryDisplay');
+            const typeDisplay = document.getElementById('typeDisplay');
+            const progressBar = document.getElementById('progressBar');
+            
+            // Result Elements
+            const finalScore = document.getElementById('finalScore');
+            const resultMessage = document.getElementById('resultMessage');
+            const resultEmoji = document.getElementById('resultEmoji');
+
+            // Game State
+            let currentQuestionIndex = 0;
+            let score = 0;
+            let questions = [];
+            let selectedCategory = '';
+            let selectedType = '';
+            let matchingSelections = {};
+            let randomEventChance = 0.2; // 20% chance of random event
+
+            // Questions Database
+            const mathQuestions = [
+              // Pilihan Ganda
+                {
+                    type: 'multiple',
+                    question: 'Apa turunan pertama dari f(x) = 3x² + 5x - 2?',
+                    options: ['6x + 5', '6x - 5', '3x + 5', '3x - 5'],
+                    correctAnswer: 0
+                },
+                {
+                    type: 'multiple',
+                    question: 'Jika log₃(x) = 4, maka nilai x adalah?',
+                    options: ['12', '64', '81', '256'],
+                    correctAnswer: 2
+                },
+                {
+                    type: 'multiple',
+                    question: 'Apa hasil dari ∫(2x + 3)dx?',
+                    options: ['x² + 3x + C', '2x² + 3x + C', 'x² + 6x + C', '2x² + 6x + C'],
+                    correctAnswer: 0
+                },
+                {
+                    type: 'multiple',
+                    question: 'Dalam segitiga siku-siku, jika sisi tegak = 8 cm dan sisi mendatar = 6 cm, maka panjang sisi miring adalah?',
+                    options: ['10 cm', '12 cm', '14 cm', '16 cm'],
+                    correctAnswer: 0
+                },
+                {
+                    type: 'multiple',
+                    question: 'Apa nilai dari sin(30°) + cos(60°)?',
+                    options: ['0', '0.5', '1', '1.5'],
+                    correctAnswer: 2
+                },
+                {
+                    type: 'multiple',
+                    question: 'Jika matriks A = [[2, 3], [4, 1]] dan matriks B = [[1, 0], [3, 2]], maka A + B =?',
+                    options: ['[[3, 3], [7, 3]]', '[[3, 0], [7, 2]]', '[[3, 3], [7, 2]]', '[[3, 0], [7, 3]]'],
+                    correctAnswer: 0
+                },
+                {
+                    type: 'multiple',
+                    question: 'Apa nilai dari lim(x→2) (x² - 4)/(x - 2)?',
+                    options: ['0', '2', '4', 'Tidak ada'],
+                    correctAnswer: 2
+                },
+                {
+                    type: 'multiple',
+                    question: 'Jika persamaan kuadrat x² - 5x + 6 = 0, maka akar-akarnya adalah?',
+                    options: ['1 dan 6', '2 dan 3', '-2 dan -3', '-1 dan -6'],
+                    correctAnswer: 1
+                },
+                {
+                    type: 'multiple',
+                  question: 'Apa nilai dari 5! (5 faktorial)?',
+                    options: ['25', '100', '120', '150'],
+                    correctAnswer: 2
+                },
+                {
+                    type: 'multiple',
+                    question: 'Dalam barisan geometri, jika suku pertama = 3 dan rasio = 2, maka suku ke-5 adalah?',
+                    options: ['24', '48', '96', '192'],
+                    correctAnswer: 1
+                },
+                {
+                    type: 'multiple',
+                    question: 'Apa nilai dari cos²(45°) + sin²(45°)?',
+                    options: ['0', '0.5', '1', '√2'],
+                    correctAnswer: 2
+                },
+                {
+                    type: 'multiple',
+                    question: 'Jika vektor a = (2, 3) dan vektor b = (4, 1), maka a · b (hasil dot product) adalah?',
+                    options: ['5', '10', '11', '14'],
+                    correctAnswer: 2
+                },
+                {
+                    type: 'multiple',
+                    question: 'Apa nilai dari log₁₀(1000)?',
+                    options: ['1', '2', '3', '4'],
+                    correctAnswer: 2
+                },
+                {
+                    type: 'multiple',
+                    question: 'Jika fungsi f(x) = 2x - 5 dan g(x) = x² + 1, maka (f ∘ g)(2) =?',
+                    options: ['3', '5', '7', '9'],
+                    correctAnswer: 0
+                },
+                {
+                    type: 'multiple',
+                    question: 'Apa luas daerah yang dibatasi oleh kurva y = x², sumbu x, garis x = 0, dan x = 2?',
+                    options: ['4/3 satuan luas', '8/3 satuan luas', '16/3 satuan luas', '32/3 satuan luas'],
+                    correctAnswer: 1
+                },
+                // Menjodohkan
+                {
+                    type: 'matching',
+                    question: 'Cocokkan istilah matematika dengan definisinya',
+                    leftItems: ['Turunan', 'Integral', 'Limit', 'Matriks'],
+                    rightItems: ['Laju perubahan suatu fungsi', 'Luas di bawah kurva', 'Nilai yang didekati fungsi', 'Susunan bilangan dalam baris dan kolom'],
+                    correctMatches: [0, 1, 2, 3]
+                },
+                {
+                    type: 'matching',
+                  question: 'Cocokkan rumus dengan nama rumusnya',
+                    leftItems: ['a² + b² = c²', 'V = 1/3 × π × r² × t', 'A = π × r²', 'V = s³'],
+                    rightItems: ['Teorema Pythagoras', 'Volume kerucut', 'Luas lingkaran', 'Volume kubus'],
+                    correctMatches: [0, 1, 2, 3]
+                },
+                {
+                    type: 'matching',
+                    question: 'Cocokkan simbol matematika dengan namanya',
+                    leftItems: ['∑', '∫', '√', '∞'],
+                    rightItems: ['Sigma (Notasi penjumlahan)', 'Integral', 'Akar kuadrat', 'Tak hingga'],
+                    correctMatches: [0, 1, 2, 3]
+                },
+                // Essay
+                {
+                    type: 'essay',
+                    question: 'Jelaskan perbedaan antara turunan dan integral dalam kalkulus!',
+                    sampleAnswer: 'Turunan mengukur laju perubahan suatu fungsi pada titik tertentu, sedangkan integral menghitung luas daerah di bawah kurva fungsi atau akumulasi perubahan.'
+                },
+                {
+                    type: 'essay',
+                    question: 'Bagaimana cara menyelesaikan persamaan kuadrat ax² + bx + c = 0?',
+                    sampleAnswer: 'Persamaan kuadrat dapat diselesaikan dengan faktorisasi, melengkapi kuadrat sempurna, atau menggunakan rumus kuadrat: x = (-b ± √(b²-4ac)) / 2a.'
+                },
+                {
+                    type: 'essay',
+                    question: 'Apa yang dimaksud dengan fungsi eksponensial dan berikan contoh penerapannya dalam kehidupan sehari-hari?',
+                    sampleAnswer: 'Fungsi eksponensial adalah fungsi dengan bentuk f(x) = a^x, di mana a adalah konstanta positif. Contoh penerapan: pertumbuhan populasi, bunga majemuk, dan peluruhan radioaktif.'
+                }
+            ];
+
+            const bioQuestions = [
+                // Pilihan Ganda
+                {
+                    type: 'multiple',
+                    question: 'Organel yang berfungsi sebagai tempat terjadinya fotosintesis adalah?',
+                    options: ['Mitokondria', 'Kloroplas', 'Retikulum Endoplasma', 'Lisosom'],
+                    correctAnswer: 1
+                },
+                {
+                    type: 'multiple',
+                    question: 'Protein yang membawa oksigen dalam darah adalah?',
+                    options: ['Fibrinogen', 'Albumin', 'Hemoglobin', 'Globulin'],
+                    correctAnswer: 2
+                },
+                {
+                    type: 'multiple',
+                    question: 'Tahap pertama dari siklus sel adalah?',
+                    options: ['Profase', 'Metafase', 'Anafase', 'Interfase'],
+                    correctAnswer: 3
+                  },
+                {
+                    type: 'multiple',
+                    question: 'Enzim yang mencerna protein di dalam lambung adalah?',
+                    options: ['Amilase', 'Lipase', 'Pepsin', 'Tripsin'],
+                    correctAnswer: 2
+                },
+                {
+                    type: 'multiple',
+                    question: 'Jenis jaringan yang menyusun otot adalah?',
+                    options: ['Epitel', 'Ikatan', 'Otot', 'Saraf'],
+                    correctAnswer: 2
+                },
+                {
+                    type: 'multiple',
+                    question: 'Proses pembentukan ATP dalam respirasi aerob terjadi di?',
+                    options: ['Sitoplasma', 'Matriks mitokondria', 'Membran dalam mitokondria', 'Kloroplas'],
+                    correctAnswer: 2
+                },
+                {
+                    type: 'multiple',
+                    question: 'Hormon yang berperan dalam proses pematangan sel telur adalah?',
+                    options: ['Insulin', 'Glukagon', 'Estrogen', 'Testosteron'],
+                    correctAnswer: 2
+                },
+                {
+                    type: 'multiple',
+                    question: 'Tumbuhan yang tidak memiliki pembuluh angkut sejati disebut?',
+                    options: ['Tumbuhan berbiji', 'Tumbuhan berbuah', 'Tumbuhan paku', 'Tumbuhan lumut'],
+                    correctAnswer: 3
+                },
+                {
+                    type: 'multiple',
+                    question: 'Struktur yang berfungsi sebagai tempat pembentukan sperma pada pria adalah?',
+                    options: ['Vas deferens', 'Epididimis', 'Testis', 'Prostat'],
+                    correctAnswer: 2
+                },
+                {
+                    type: 'multiple',
+                    question: 'Mekanisme pertahanan tubuh yang bersifat spesifik terhadap patogen tertentu disebut?',
+                    options: ['Imunitas nonspesifik', 'Imunitas spesifik', 'Respon inflamasi', 'Fagositosis'],
+                    correctAnswer: 1
+                },
+                {
+                    type: 'multiple',
+                    question: 'Jenis mutasi yang mengakibatkan perubahan satu pasangan basa nitrogen adalah?',
+                    options: ['Mutasi frameshift', 'Mutasi titik', 'Mutasi kromosom', 'Mutasi genom'],
+                    correctAnswer: 1
+                  },
+                {
+                    type: 'multiple',
+                    question: 'Proses konversi energi cahaya menjadi energi kimia dalam fotosintesis terjadi pada tahap?',
+                    options: ['Reaksi terang', 'Reaksi gelap', 'Glikolisis', 'Siklus Krebs'],
+                    correctAnswer: 0
+                },
+                {
+                    type: 'multiple',
+                    question: 'Enzim yang memecah glikogen menjadi glukosa adalah?',
+                    options: ['Amilase', 'Laktase', 'Maltase', 'Glikogen fosforilase'],
+                    correctAnswer: 3
+                },
+                {
+                    type: 'multiple',
+                    question: 'Pernyataan yang benar tentang DNA adalah?',
+                    options: ['Terdiri dari ribosa', 'Basa nitrogen yang dimiliki adalah adenin, guanin, sitosin, dan urasil', 'Strukturnya berupa helai ganda', 'Terletak di sitoplasma'],
+                    correctAnswer: 2
+                },
+                {
+                    type: 'multiple',
+                    question: 'Jenis jaringan epitel yang melapisi permukaan luar tubuh adalah?',
+                    options: ['Epitel silinder', 'Epitel kubus', 'Epitel pipih selapis', 'Epitel pipih berlapis banyak'],
+                    correctAnswer: 3
+                },
+                // Menjodohkan
+                {
+                    type: 'matching',
+                    question: 'Cocokkan organel sel dengan fungsinya',
+                    leftItems: ['Nukleus', 'Mitokondria', 'Kloroplas', 'Ribosom'],
+                    rightItems: ['Mengendalikan aktivitas sel', 'Menghasilkan energi (ATP)', 'Melakukan fotosintesis', 'Mensintesis protein'],
+                    correctMatches: [0, 1, 2, 3]
+                },
+                {
+                    type: 'matching',
+                    question: 'Cocokkan sistem organ dengan fungsinya',
+                    leftItems: ['Sistem pernapasan', 'Sistem pencernaan', 'Sistem peredaran darah', 'Sistem saraf'],
+                    rightItems: ['Pertukaran gas', 'Mencerna makanan', 'Mengedarkan darah', 'Mengkoordinasi tubuh'],
+                    correctMatches: [0, 1, 2, 3]
+                },
+                {
+                    type: 'matching',
+                    question: 'Cocokkan tahap mitosis dengan kejadiannya',
+                    leftItems: ['Profase', 'Metafase', 'Anafase', 'Telofase'],
+                    rightItems: ['Kromosom memadat', 'Kromosom berjajar di tengah', 'Kromatid terpisah', 'Membran inti terbentuk kembali'],
+                    correctMatches: [0, 1, 2, 3]
+                },
+                // Essay
+                {
+                    type: 'essay',
+                  question: 'Jelaskan perbedaan antara mitosis dan meiosis!',
+                    sampleAnswer: 'Mitosis adalah pembelahan sel yang menghasilkan dua sel anak identik dengan sel induk, terjadi pada sel somatik untuk pertumbuhan dan perbaikan jaringan. Meiosis adalah pembelahan sel yang menghasilkan empat sel anak dengan setengah jumlah kromosom sel induk, terjadi pada sel germinal untuk pembentukan gamet.'
+                },
+                {
+                    type: 'essay',
+                    question: 'Bagaimana proses fotosintesis terjadi pada tumbuhan?',
+                    sampleAnswer: 'Fotosintesis terjadi dalam dua tahap: reaksi terang dan reaksi gelap. Reaksi terang memerlukan cahaya matahari dan menghasilkan ATP, NADPH, dan O2. Reaksi gelap tidak memerlukan cahaya langsung dan menggunakan ATP dan NADPH untuk mengubah CO2 menjadi glukosa.'
+                },
+                {
+                    type: 'essay',
+                    question: 'Apa yang dimaksud dengan rantai makanan dan berikan contohnya dalam ekosistem darat?',
+                    sampleAnswer: 'Rantai makanan adalah perpindahan energi dari sumber energi tumbuhan melalui serangkaian organisme yang makan dan dimakan. Contoh: Rumput (produsen) → Belalang (konsumen primer) → Katak (konsumen sekunder) → Ular (konsumen tersier) → Elang (konsumen puncak).'
+                }
+            ];
+
+            const historyQuestions = [
+                // Pilihan Ganda
+                {
+                    type: 'multiple',
+                    question: 'Kerajaan Hindu-Buddha terbesar di Nusantara yang berhasil mempersatukan wilayah Indonesia bagian barat adalah?',
+                    options: ['Sriwijaya', 'Majapahit', 'Tarumanegara', 'Kediri'],
+                    correctAnswer: 1
+                },
+                {
+                    type: 'multiple',
+                    question: 'Siapa gubernur jenderal VOC yang menerapkan sistem tanam paksa?',
+                    options: ['J.P. Coen', 'Daendels', 'Raffles', 'Van den Bosch'],
+                    correctAnswer: 3
+                },
+                {
+                    type: 'multiple',
+                    question: 'Peristiwa Rengasdengklok terjadi pada tanggal?',
+                    options: ['15 Agustus 1945', '16 Agustus 1945', '17 Agustus 1945', '18 Agustus 1945'],
+                    correctAnswer: 1
+                },
+                {
+                    type: 'multiple',
+                    question: 'Siapa yang mengetik naskah proklamasi kemerdekaan Indonesia?',
+                    options: ['Ir. Soekarno', 'Dr. Moh. Hatta', 'Sayuti Melik', 'Ahmad Soebardjo'],
+                    correctAnswer: 2
+                },
+                {
+                    type: 'multiple',
+                    question: 'Organisasi pemuda yang mendirikan BPUPKI adalah?',
+                    options: ['Indische Partij', 'Budi Utomo', 'Indonesische Vereeniging', 'Perhimpunan Indonesia'],
+                    correctAnswer: 2
+                },
+                {
+                    type: 'multiple',
+                  question: 'Sumpah Pemuda dikutuk pada tanggal?',
+                    options: ['27 Oktober 1928', '28 Oktober 1928', '29 Oktober 1928', '30 Oktober 1928'],
+                    correctAnswer: 1
+                },
+                {
+                    type: 'multiple',
+                    question: 'Pertempuran Ambarawa terjadi pada masa perjuangan melawan?',
+                    options: ['Portugis', 'Belanda', 'Inggris', 'Jepang'],
+                    correctAnswer: 2
+                },
+                {
+                    type: 'multiple',
+                    question: 'Siapa pahlawan nasional yang dikenal dengan julukan "Singa dari Pulau Jawa"?',
+                    options: ['Pangeran Diponegoro', 'Tuanku Imam Bonjol', 'Teuku Umar', 'Cut Nyak Dien'],
+                    correctAnswer: 0
+                },
+                {
+                    type: 'multiple',
+                    question: 'Perjanjian yang mengakui kedaulatan Republik Indonesia secara resmi adalah?',
+                    options: ['Perjanjian Linggarjati', 'Perjanjian Renville', 'Perjanjian Roem-Royen', 'Konferensi Meja Bundar'],
+                    correctAnswer: 3
+                },
+                {
+                    type: 'multiple',
+                    question: 'Gerakan non-blok dibentuk pada tahun?',
+                    options: ['1950', '1955', '1961', '1965'],
+                    correctAnswer: 1
+                },
+                {
+                    type: 'multiple',
+                    question: 'Siapa presiden Indonesia yang mengumumkan berdirinya Gerakan Non-Blok?',
+                    options: ['Ir. Soekarno', 'Soeharto', 'B.J. Habibie', 'Megawati Soekarnoputri'],
+                    correctAnswer: 0
+                },
+                {
+                    type: 'multiple',
+                    question: 'Peristiwa G30S/PKI terjadi pada tahun?',
+                    options: ['1963', '1965', '1967', '1969'],
+                    correctAnswer: 1
+                },
+                {
+                    type: 'multiple',
+                    question: 'Orde Baru berakhir dengan kejatuhan Presiden Soeharto pada tahun?',
+                    options: ['1996', '1997', '1998', '1999'],
+                    correctAnswer: 2
+                },
+                {
+                    type: 'multiple',
+                    question: 'Reformasi 1998 dipelopori oleh gerakan mahasiswa yang menuntut?',
+                    options: ['Penurunan harga BBM', 'Pemilu yang bersih dan adil', 'Penurunan Presiden Soeharto', 'Pembubaran Golkar'],
+                    correctAnswer: 2
+                  },
+                {
+                    type: 'multiple',
+                    question: 'Siapa presiden Indonesia pertama yang dipilih secara langsung oleh rakyat?',
+                    options: ['Abdurrahman Wahid', 'Megawati Soekarnoputri', 'Susilo Bambang Yudhoyono', 'Joko Widodo'],
+                    correctAnswer: 2
+                },
+                // Menjodohkan
+                {
+                    type: 'matching',
+                    question: 'Cocokkan peristiwa sejarah dengan tahunnya',
+                    leftItems: ['Sumpah Pemuda', 'Proklamasi Kemerdekaan', 'Agressi Militer Belanda I', 'G30S/PKI'],
+                    rightItems: ['1928', '1945', '1947', '1965'],
+                    correctMatches: [0, 1, 2, 3]
+                },
+                {
+                    type: 'matching',
+                    question: 'Cocokkan pahlawan nasional dengan daerah asalnya',
+                    leftItems: ['Pangeran Diponegoro', 'Tuanku Imam Bonjol', 'Teuku Umar', 'Cut Nyak Dien'],
+                    rightItems: ['Yogyakarta', 'Sumatera Barat', 'Aceh', 'Aceh'],
+                    correctMatches: [0, 1, 2, 3]
+                },
+                {
+                    type: 'matching',
+                    question: 'Cocokkan perjanjian dengan isinya',
+                    leftItems: ['Perjanjian Linggarjati', 'Perjanjian Renville', 'Perjanjian Roem-Royen', 'KMB'],
+                    rightItems: ['Pengakuan de facto RI atas Jawa dan Madura', 'Garis Van Mook', 'Gencatan senjata', 'Pengakuan kedaulatan RI'],
+                    correctMatches: [0, 1, 2, 3]
+                },
+                // Essay
+                {
+                    type: 'essay',
+                    question: 'Jelaskan latar belakang dan tujuan dibentuknya BPUPKI dan PPKI!',
+                    sampleAnswer: 'BPUPKI (Badan Penyelidik Usaha-usaha Persiapan Kemerdekaan Indonesia) dibentuk pada 29 April 1945 dengan tujuan menyelidiki dan mempersiapkan segala sesuatu yang penting bagi terbentuknya pemerintah Indonesia merdeka. PPKI (Panitia Persiapan Kemerdekaan Indonesia) dibentuk pada 7 Agustus 1945 untuk melanjutkan tugas BPUPKI dan mempersiapkan segala sesuatu yang berhubungan dengan pelaksanaan proklamasi kemerdekaan.'
+                },
+                {
+                    type: 'essay',
+                    question: 'Apa dampak pelaksanaan sistem tanam paksa bagi rakyat Indonesia?',
+                    sampleAnswer: 'Sistem tanam paksa yang diterapkan oleh pemerintah kolonial Belanda memiliki dampak negatif bagi rakyat Indonesia, antara lain: penderitaan rakyat karena harus menyerahkan sebagian besar hasil taninya kepada pemerintah, timbulnya kelaparan dan penyakit, serta kemiskinan yang meluas. Selain itu, sistem ini juga mengakibatkan kerusakan lingkungan dan perubahan struktur perekonomian tradisional.'
+                },
+                {
+                    type: 'essay',
+                    question: 'Bagaimana proses perumusan Pancasila sebagai dasar negara Indonesia?',
+                    sampleAnswer: 'Pancasila dirumuskan melalui proses yang panjang. Pertama, Ir. Soekarno mengusulkan rumusan awal Pancasila dalam pidatonya pada 1 Juni 1945 di sidang BPUPKI. Kemudian, Panitia Sembilan yang dipimpin oleh Ir. Soekarno merumuskan kembali dan menghasilkan Piagam Jakarta. Pada tanggal 18 Agustus 1945, PPKI mengubah Piagam Jakarta dengan menghapus tujuh kata dan menetapkan Pancasila sebagai dasar negara Indonesia yang tercantum dalam Pembukaan UUD 1945.'
+                }
+            ];
+
+            const pjokQuestions = [
+                // Pilihan Ganda
+                {
+                    type: 'multiple',
+                  question: 'Berapa jumlah pemain dalam satu tim bola basket?',
+                    options: ['5 orang', '6 orang', '7 orang', '11 orang'],
+                    correctAnswer: 0
+                },
+                {
+                    type: 'multiple',
+                    question: 'Berapa panjang lapangan sepak bola standar internasional?',
+                    options: ['90-100 meter', '100-110 meter', '110-120 meter', '120-130 meter'],
+                    correctAnswer: 1
+                },
+                {
+                    type: 'multiple',
+                    question: 'Apa nama teknik dasar dalam bulu tangkis untuk memukul kok yang tinggi dan jauh?',
+                    options: ['Drive', 'Smash', 'Clear', 'Dropshot'],
+                    correctAnswer: 2
+                },
+                {
+                    type: 'multiple',
+                    question: 'Berapa lama waktu pertandingan sepak bola satu babak?',
+                    options: ['30 menit', '35 menit', '40 menit', '45 menit'],
+                    correctAnswer: 3
+                },
+                {
+                    type: 'multiple',
+                    question: 'Apa nama gerakan senam lantai yang dilakukan dengan bertumpu pada kedua tangan dan kudiangkat ke atas?',
+                    options: ['Handstand', 'Headstand', 'Cartwheel', 'Backflip'],
+                    correctAnswer: 0
+                },
+                {
+                    type: 'multiple',
+                    question: 'Dalam atletik, nomor lari jarak pendek adalah?',
+                    options: ['100m, 200m, 400m', '800m, 1500m, 3000m', '5000m, 10000m, marathon', 'Lari gawang, lari estafet, lari halang rintang'],
+                    correctAnswer: 0
+                },
+                {
+                    type: 'multiple',
+                    question: 'Berapa tinggi net untuk pertandingan bulu tangkis tunggal putra?',
+                    options: ['1.50 m', '1.524 m', '1.55 m', '1.60 m'],
+                    correctAnswer: 1
+                },
+                {
+                    type: 'multiple',
+                    question: 'Apa nama teknik dasar dalam permainan bola voli untuk menghalangi serangan lawan?',
+                    options: ['Passing', 'Smash', 'Block', 'Serve'],
+                    correctAnswer: 2
+                },
+                {
+                    type: 'multiple',
+                  question: 'Dalam pencak silat, teknik dasar untuk menghindar dari serangan lawan disebut?',
+                    options: ['Pukulan', 'Tendangan', 'Elakan', 'Tangkisan'],
+                    correctAnswer: 2
+                },
+                {
+                    type: 'multiple',
+                    question: 'Berapa jumlah pemain dalam satu tim bola voli?',
+                    options: ['4 orang', '5 orang', '6 orang', '7 orang'],
+                    correctAnswer: 2
+                },
+                {
+                    type: 'multiple',
+                    question: 'Apa nama teknik renang dengan posisi dada menghadap ke bawah dan kedua tangan secara bergantian digerakkan ke depan?',
+                    options: ['Gaya dada', 'Gaya punggung', 'Gaya kupu-kupu', 'Gaya bebas'],
+                    correctAnswer: 3
+                },
+                {
+                    type: 'multiple',
+                    question: 'Dalam permainan tenis meja, berapa jumlah poin yang dibutuhkan untuk memenangkan satu set?',
+                    options: ['9 poin', '11 poin', '15 poin', '21 poin'],
+                    correctAnswer: 1
+                },
+                {
+                    type: 'multiple',
+                    question: 'Apa nama gerakan dalam senam irama yang menggunakan alat seperti pita, bola, atau tongkat?',
+                    options: ['Senam lantai', 'Senam artistik', 'Senam ritmik', 'Senam aerobik'],
+                    correctAnswer: 2
+                },
+                {
+                    type: 'multiple',
+                    question: 'Berapa panjang lintasan lari 100 meter?',
+                    options: ['80 meter', '90 meter', '100 meter', '110 meter'],
+                    correctAnswer: 2
+                },
+                {
+                    type: 'multiple',
+                    question: 'Apa nama teknik dasar dalam permainan sepak bola untuk mengoper bola kepada teman?',
+                    options: ['Tendangan', 'Heading', 'Passing', 'Dribbling'],
+                    correctAnswer: 2
+                },
+                // Menjodohkan
+                {
+                    type: 'matching',
+                    question: 'Cocokkan cabang olahraga dengan peralatannya',
+                    leftItems: ['Bola Basket', 'Bulu Tangkis', 'Sepak Bola', 'Tenis Meja'],
+                    rightItems: ['Ring dan Bola', 'Raket dan Kok', 'Bola dan Gawang', 'Bet dan Bola'],
+                    correctMatches: [0, 1, 2, 3]
+                },
+                {
+                    type: 'matching',
+                  question: 'Cocokkan istilah dalam atletik dengan penjelasannya',
+                    leftItems: ['Start Blok', 'Lompat Jauh', 'Lempar Lembing', 'Lari Estafet'],
+                    rightItems: ['Alat untuk start lari jarak pendek', 'Melompat sejauh mungkin dari papan tolakan', 'Melempar lembing sejauh mungkin', 'Lari bergantian dengan membawa tongkat estafet'],
+                    correctMatches: [0, 1, 2, 3]
+                },
+                {
+                    type: 'matching',
+                    question: 'Cocokkan gerakan senam lantai dengan penjelasannya',
+                    leftItems: ['Handstand', 'Headstand', 'Cartwheel', 'Backflip'],
+                    rightItems: ['Sikur terbalik dengan tangan sebagai tumpuan', 'Sikur terbalik dengan kepala sebagai tumpuan', 'Gerakan berputar sambil melintangkan kaki', 'Guling ke belakang dengan posisi badan melenting'],
+                    correctMatches: [0, 1, 2, 3]
+                },
+                // Essay
+                {
+                    type: 'essay',
+                    question: 'Jelaskan teknik dasar passing dalam permainan bola voli!',
+                    sampleAnswer: 'Teknik dasar passing dalam bola voli terdiri dari dua jenis: passing atas dan passing bawah. Passing atas dilakukan dengan jari-jari tangan membentuk segitiga, kontak dengan bola menggunakan ujung jari, dan gerakan dari pergelangan tangan. Passing bawah dilakukan dengan kedua tangan dirapatkan, kontak dengan bola menggunakan lengan bawah, dan gerakan dari lutut dan siku.'
+                },
+                {
+                    type: 'essay',
+                    question: 'Bagaimana cara melakukan teknik smash dalam permainan bulu tangkis yang baik dan benar?',
+                    sampleAnswer: 'Teknik smash dalam bulu tangkis yang baik dan benar meliputi: 1) Posisi awal dengan kaki sedikit melebar dan badan sedikit membungkuk, 2) Ayunan raket dari belakang badan ke atas, 3) Lompatan untuk mencapai kok setinggi mungkin, 4) Memukul kok pada titik tertinggi dengan gerakan pergelangan tangan, dan 5) Pendaratan yang aman dengan kaki sedikit menekuk.'
+                },
+                {
+                    type: 'essay',
+                    question: 'Apa saja manfaat olahraga secara rutin bagi kesehatan?',
+                    sampleAnswer: 'Manfaat olahraga secara rutin bagi kesehatan antara lain: 1) Meningkatkan kekuatan otot dan daya tahan tubuh, 2) Meningkatkan kesehatan jantung dan paru-paru, 3) Membantu mengontrol berat badan, 4) Meningkatkan kesehatan mental dengan mengurangi stres dan depresi, 5) Meningkatkan kualitas tidur, dan 6) Mengurangi risiko penyakit kronis seperti diabetes, hipertensi, dan penyakit jantung.'
+                }
+            ];
+
+            const ppknQuestions = [
+                // Pilihan Ganda
+                {
+                    type: 'multiple',
+                    question: 'Pancasila adalah dasar negara Indonesia yang tercantum dalam?',
+                    options: ['Batang Tubuh UUD 1945', 'Pembukaan UUD 1945', 'Penjelasan UUD 1945', 'Amandemen UUD 1945'],
+                    correctAnswer: 1
+                },
+                {
+                    type: 'multiple',
+                    question: 'Siapa yang mencetuskan nama "Pancasila"?',
+                    options: ['Ir. Soekarno', 'Moh. Hatta', 'Mr. Muhammad Yamin', 'Mr. Supomo'],
+                    correctAnswer: 0
+                },
+                {
+                    type: 'multiple',
+                    question: 'Silas pertama Pancasila adalah "Ketuhanan Yang Maha Esa" dengan arti?',
+                    options: ['Indonesia adalah negara agama', 'Mengakui adanya Tuhan sebagai pencipta alam semesta', 'Setiap warga negara wajib beragama', 'Negara menentukan agama rakyat'],
+                    correctAnswer: 1
+                  },
+                {
+                    type: 'multiple',
+                    question: 'Apa nama lembaga yang memiliki kekuasaan legislatif di Indonesia?',
+                    options: ['Presiden', 'Mahkamah Konstitusi', 'DPR', 'Kabinet'],
+                    correctAnswer: 2
+                },
+                {
+                    type: 'multiple',
+                    question: 'Pasal 33 UUD 1945 mengatur tentang?',
+                    options: ['Kedaulatan rakyat', 'Perekonomian nasional', 'Pertahanan negara', 'Pendidikan nasional'],
+                    correctAnswer: 1
+                },
+                {
+                    type: 'multiple',
+                    question: 'Apa hak warga negara untuk memilih pemimpin dalam pemilihan umum?',
+                    options: ['Hak asasi', 'Hak politik', 'Hak sosial', 'Hak ekonomi'],
+                    correctAnswer: 1
+                },
+                {
+                    type: 'multiple',
+                    question: 'Siapa yang menjabat sebagai kepala pemerintahan dan kepala negara Indonesia?',
+                    options: ['Wakil Presiden', 'Presiden', 'Perdana Menteri', 'Gubernur'],
+                    correctAnswer: 1
+                },
+                {
+                    type: 'multiple',
+                    question: 'Apa nama sistem pemerintahan Indonesia?',
+                    options: ['Monarki', 'Republik', 'Demokrasi', 'Presidensial'],
+                    correctAnswer: 3
+                },
+                {
+                    type: 'multiple',
+                    question: 'Apa prinsip yang melandasi hubungan internasional Indonesia?',
+                    options: ['Bebas Aktif', 'Netral', 'Blok Timur', 'Blok Barat'],
+                    correctAnswer: 0
+                },
+                {
+                    type: 'multiple',
+                    question: 'Apa nama lembaga yang bertugas menjaga dan melaksanakan ketatanegaraan?',
+                    options: ['KPK', 'MA', 'MK', 'BPK'],
+                    correctAnswer: 2
+                },
+                {
+                    type: 'multiple',
+                    question: 'Apa yang dimaksud dengan integrasi nasional?',
+                    options: ['Penyatuan semua suku di Indonesia', 'Proses penyatuan berbagai kelompok sosial budaya menjadi satu kesatuan', 'Pembentukan negara kesatuan', 'Penghapusan perbedaan budaya'],
+                    correctAnswer: 1
+                  },
+                {
+                    type: 'multiple',
+                    question: 'Apa fungsi MPR sebelum amandemen UUD 1945?',
+                    options: ['Membuat undang-undang', 'Memilih presiden', 'Menetapkan GBHN', 'Mengawasi pemerintah'],
+                    correctAnswer: 2
+                },
+                {
+                    type: 'multiple',
+                    question: 'Apa nama lembaga negara yang memiliki kekuasaan yudikatif?',
+                    options: ['Presiden', 'DPR', 'MA', 'BPK'],
+                    correctAnswer: 2
+                },
+                {
+                    type: 'multiple',
+                    question: 'Apa yang dimaksud dengan kedaulatan rakyat?',
+                    options: ['Kekuasaan berada di tangan rakyat', 'Rakyat memilih pemimpin langsung', 'Rakyat bebas menentukan pilihannya', 'Rakyat adalah pemilik negara'],
+                    correctAnswer: 0
+                },
+                {
+                    type: 'multiple',
+                    question: 'Apa yang dimaksud dengan negara hukum (rechtsstaat)?',
+                    options: ['Negara yang berdasarkan hukum', 'Negara yang hukumnya ditaati rakyat', 'Negara yang menegakkan hukum', 'Negara yang melindungi hak asasi manusia'],
+                    correctAnswer: 0
+                },
+                // Menjodohkan
+                {
+                    type: 'matching',
+                    question: 'Cocokkan sila Pancasila dengan isinya',
+                    leftItems: ['Sila Pertama', 'Sila Kedua', 'Sila Ketiga', 'Sila Keempat'],
+                    rightItems: ['Ketuhanan Yang Maha Esa', 'Kemanusiaan yang Adil dan Beradab', 'Persatuan Indonesia', 'Kerakyatan yang Dipimpin oleh Hikmat Kebijaksanaan'],
+                    correctMatches: [0, 1, 2, 3]
+                },
+                {
+                    type: 'matching',
+                    question: 'Cocokkan lembaga negara dengan fungsinya',
+                    leftItems: ['DPR', 'Presiden', 'MA', 'BPK'],
+                    rightItems: ['Membuat undang-undang', 'Memegang kekuasaan eksekutif', 'Memegang kekuasaan kehakiman', 'Mengawasi keuangan negara'],
+                    correctMatches: [0, 1, 2, 3]
+                },
+                {
+                    type: 'matching',
+                    question: 'Cocokkan hak asasi manusia dengan contohnya',
+                    leftItems: ['Hak untuk hidup', 'Hak kebebasan', 'Hak persamaan', 'Hak milik'],
+                    rightItems: ['Hak tidak dibunuh secara sewenang-wenang', 'Hak menyampaikan pendapat', 'Hak mendapat perlakuan yang sama di hadapan hukum', 'Hak memiliki sesuatu'],
+                    correctMatches: [0, 1, 2, 3]
+                },
+                // Essay
+                {
+                    type: 'essay',
+                  question: 'Jelaskan pengertian negara kesatuan Republik Indonesia menurut UUD 1945!',
+                    sampleAnswer: 'Negara Kesatuan Republik Indonesia (NKRI) adalah negara yang berbentuk republik dengan sistem pemerintahan presidensial. NKRI adalah negara yang merdeka, bersatu, berdaulat, adil, dan makmur. Indonesia adalah negara kesatuan yang berkedaulatan rakyat dan berdasarkan Pancasila dan UUD 1945. Wilayah NKRI adalah satu kesatuan yang tidak dapat dipisah-pisahkan.'
+                },
+                {
+                    type: 'essay',
+                    question: 'Apa saja nilai-nilai Pancasila yang terkandung dalam kehidupan sehari-hari?',
+                    sampleAnswer: 'Nilai-nilai Pancasila dalam kehidupan sehari-hari: 1) Sila pertama: saling menghormati perbedaan ibadah dan kepercayaan, 2) Sila kedua: menghargai sesama manusia tanpa membedakan suku, ras, agama, dan golongan, 3) Sila ketiga: menumbuhkan rasa cinta tanah air dan mengutamakan persatuan, 4) Sila keempat: mengutamakan musyawarah untuk mufakat dalam mengambil keputusan, dan 5) Sila kelima: bersikap jujur, adil, dan bertanggung jawab.'
+                },
+                {
+                    type: 'essay',
+                    question: 'Bagaimana peran warga negara dalam mewujudkan kedaulatan rakyat?',
+                    sampleAnswer: 'Peran warga negara dalam mewujudkan kedaulatan rakyat antara lain: 1) Aktif berpartisipasi dalam pemilu untuk memilih wakil rakyat dan pemimpin, 2) Mengawasi kinerja pemerintah dan wakil rakyat, 3) Memberikan masukan dan saran kepada pemerintah, 4) Menjunjung tinggi konstitusi dan hukum, 5) Menolak segala bentuk penyelewengan kekuasaan, dan 6) Menjaga keutuhan negara dari ancaman baik dari dalam maupun luar negeri.'
+                }
+            ];
+
+            const tiQuestions = [
+                // Pilihan Ganda
+                {
+                    type: 'multiple',
+                    question: 'Apa singkatan dari CPU?',
+                    options: ['Central Processing Unit', 'Computer Processing Unit', 'Central Program Unit', 'Computer Program Unit'],
+                    correctAnswer: 0
+                },
+                {
+                    type: 'multiple',
+                    question: 'Apa fungsi utama dari RAM?',
+                    options: ['Menyimpan data secara permanen', 'Menyimpan data sementara saat komputer menyala', 'Memproses data', 'Menampilkan output'],
+                    correctAnswer: 1
+                },
+                {
+                    type: 'multiple',
+                    question: 'Apa bahasa pemrograman yang paling populer untuk pengembangan web?',
+                    options: ['Python', 'Java', 'JavaScript', 'C++'],
+                    correctAnswer: 2
+                },
+                {
+                    type: 'multiple',
+                    question: 'Apa yang dimaksud dengan algoritma?',
+                    options: ['Bahasa pemrograman', 'Langkah-langkah sistematis untuk menyelesaikan masalah', 'Perangkat keras komputer', 'Sistem operasi'],
+                    correctAnswer: 1
+                },
+                {
+                    type: 'multiple',
+                    question: 'Apa fungsi dari router dalam jaringan komputer?',
+                    options: ['Menyimpan data', 'Meneruskan paket data antar jaringan', 'Menampilkan output', 'Mengolah data'],
+                    correctAnswer: 1
+                },
+                {
+                    type: 'multiple',
+                    question: 'Apa singkatan dari LAN?',
+                  options: ['Large Area Network', 'Local Area Network', 'Long Area Network', 'Linked Area Network'],
+                    correctAnswer: 1
+                },
+                {
+                    type: 'multiple',
+                    question: 'Apa yang dimaksud dengan cloud computing?',
+                    options: ['Komputasi menggunakan awan', 'Pengiriman layanan komputasi melalui internet', 'Komputasi di udara', 'Komputasi menggunakan cuaca'],
+                    correctAnswer: 1
+                },
+                {
+                    type: 'multiple',
+                    question: 'Apa fungsi dari sistem operasi?',
+                    options: ['Membuat program', 'Mengelola sumber daya hardware dan menyediakan layanan untuk software', 'Menampilkan output', 'Menyimpan data'],
+                    correctAnswer: 1
+                },
+                {
+                    type: 'multiple',
+                    question: 'Apa yang dimaksud dengan HTML?',
+                    options: ['Bahasa pemrograman', 'Bahasa markup untuk membuat halaman web', 'Sistem operasi', 'Perangkat keras'],
+                    correctAnswer: 1
+                },
+                {
+                    type: 'multiple',
+                    question: 'Apa yang dimaksud dengan phishing?',
+                    options: ['Teknik memancing ikan', 'Upaya penipuan untuk mendapatkan informasi sensitif', 'Jenis virus komputer', 'Bahasa pemrograman'],
+                    correctAnswer: 1
+                },
+                {
+                    type: 'multiple',
+                    question: 'Apa fungsi dari firewall?',
+                    options: ['Mendinginkan komputer', 'Melindungi jaringan dari akses yang tidak sah', 'Mempercepat koneksi internet', 'Menyimpan data'],
+                    correctAnswer: 1
+                },
+                {
+                    type: 'multiple',
+                    question: 'Apa yang dimaksud dengan open source?',
+                    options: ['Perangkat lunak yang sumber kodenya terbuka', 'Perangkat lunak gratis', 'Perangkat keras', 'Sistem operasi'],
+                    correctAnswer: 0
+                },
+                {
+                    type: 'multiple',
+                    question: 'Apa fungsi dari compiler?',
+                    options: ['Menjalankan program', 'Menerjemahkan kode sumber menjadi kode mesin', 'Mendebug program', 'Menyimpan data'],
+                    correctAnswer: 1
+                },
+                {
+                    type: 'multiple',
+                    question: 'Apa yang dimaksud dengan database?',
+                    options: ['Kumpulan data yang terorganisir', 'Bahasa pemrograman', 'Perangkat keras', 'Sistem operasi'],
+                    correctAnswer: 0
+                  },
+                {
+                    type: 'multiple',
+                    question: 'Apa fungsi dari protokol TCP/IP?',
+                    options: ['Mengamankan jaringan', 'Mengatur cara data dikirim dan diterima melalui internet', 'Mempercepat koneksi internet', 'Menyimpan data'],
+                    correctAnswer: 1
+                },
+                // Menjodohkan
+                {
+                    type: 'matching',
+                    question: 'Cocokkan istilah teknologi dengan penjelasannya',
+                    leftItems: ['Hardware', 'Software', 'Malware', 'Firewall'],
+                    rightItems: ['Komponen fisik komputer', 'Program atau aplikasi komputer', 'Perangkat lunak berbahaya', 'Sistem keamanan jaringan'],
+                    correctMatches: [0, 1, 2, 3]
+                },
+                {
+                    type: 'matching',
+                    question: 'Cocokkan bahasa pemrograman dengan kegunaannya',
+                    leftItems: ['HTML', 'Python', 'SQL', 'JavaScript'],
+                    rightItems: ['Membuat struktur halaman web', 'Pengembangan aplikasi dan data science', 'Mengelola database', 'Membuat halaman web interaktif'],
+                    correctMatches: [0, 1, 2, 3]
+                },
+                {
+                    type: 'matching',
+                    question: 'Cocokkan perangkat jaringan dengan fungsinya',
+                    leftItems: ['Router', 'Switch', 'Modem', 'NIC'],
+                    rightItems: ['Meneruskan paket data antar jaringan', 'Menghubungkan beberapa perangkat dalam satu jaringan', 'Menghubungkan komputer ke internet', 'Menghubungkan komputer ke jaringan'],
+                    correctMatches: [0, 1, 2, 3]
+                },
+                // Essay
+                {
+                    type: 'essay',
+                    question: 'Jelaskan perbedaan antara software dan hardware!',
+                    sampleAnswer: 'Hardware adalah komponen fisik dari komputer yang dapat dilihat dan disentuh, seperti CPU, RAM, hard disk, monitor, keyboard, dan mouse. Software adalah program atau aplikasi yang berjalan di komputer untuk melakukan tugas tertentu, seperti sistem operasi, aplikasi perkantoran, browser web, dan game. Hardware tanpa software tidak dapat berfungsi, dan software tanpa hardware tidak ada tempat untuk berjalan.'
+                },
+                {
+                    type: 'essay',
+                    question: 'Apa saja langkah-langkah untuk menjaga keamanan siber?',
+                    sampleAnswer: 'Langkah-langkah untuk menjaga keamanan siber antara lain: 1) Menggunakan password yang kuat dan unik untuk setiap akun, 2) Mengaktifkan autentikasi dua faktor, 3) Mengupdate sistem operasi dan software secara rutin, 4) Menggunakan antivirus dan firewall, 5) Hati-hati terhadap email dan situs web phishing, 6) Tidak mengunduh software dari sumber tidak terpercaya, dan 7) Membuat backup data secara rutin.'
+                },
+                {
+                    type: 'essay',
+                    question: 'Bagaimana perkembangan teknologi informasi mempengaruhi kehidupan sehari-hari?',
+                    sampleAnswer: 'Perkembangan teknologi informasi mempengaruhi kehidupan sehari-hari dengan: 1) Memudahkan komunikasi jarak jauh melalui email, media sosial, dan aplikasi pesan, 2) Mempermudah akses informasi melalui internet, 3) Menciptakan peluang kerja baru di bidang teknologi, 4) Memudahkan transaksi keuangan melalui e-banking dan e-commerce, 5) Memungkinkan pembelajaran jarak jauh, dan 6) Memfasilitasi kerja dari rumah (remote work). Namun, teknologi juga menimbulkan masalah seperti kecanduan gawai, penyebaran berita palsu, dan masalah privasi data.'
+                }
+            ];
+
+            // Random Events
+            const randomEvents = [
+              {
+                    icon: '🎁',
+                    title: 'Bonus Poin!',
+                    description: 'Kamu mendapatkan bonus 20 poin!',
+                    effect: () => { score += 20; scoreDisplay.textContent = score; }
+                },
+                {
+                    icon: '⚡',
+                    title: 'Waktu Terbatas!',
+                    description: 'Jawab pertanyaan berikut dalam 10 detik!',
+                    effect: () => { /* Implement timer for next question */ }
+                },
+                {
+                    icon: '🔄',
+                    title: 'Skip Question!',
+                    description: 'Kamu bisa melewati pertanyaan ini!',
+                    effect: () => { currentQuestionIndex++; loadQuestion(); }
+                },
+                {
+                    icon: '🎯',
+                    title: 'Double Points!',
+                    description: 'Pertanyaan berikut bernilai 20 poin!',
+                    effect: () => { /* Set next question to double points */ }
+                },
+                {
+                    icon: '💡',
+                    title: 'Hint!',
+                    description: 'Kamu mendapatkan petunjuk untuk pertanyaan ini!',
+                    effect: () => { /* Show hint for current question */ }
+                }
+            ];
+
+            // Event Listeners
+            startBtn.addEventListener('click', showCategorySelection);
+            playAgainBtn.addEventListener('click', resetQuiz);
+            
+            // Category Event Listeners
+            mathCategory.addEventListener('click', () => showQuizTypeSelection('Matematika', mathQuestions));
+            bioCategory.addEventListener('click', () => showQuizTypeSelection('Biologi', bioQuestions));
+            historyCategory.addEventListener('click', () => showQuizTypeSelection('Sejarah', historyQuestions));
+            pjokCategory.addEventListener('click', () => showQuizTypeSelection('PJOK', pjokQuestions));
+            ppknCategory.addEventListener('click', () => showQuizTypeSelection('PPKn', ppknQuestions));
+            tiCategory.addEventListener('click', () => showQuizTypeSelection('Teknologi Informatika', tiQuestions));
+            
+            // Quiz Type Event Listeners
+            multipleType.addEventListener('click', () => startQuiz('multiple'));
+            matchingType.addEventListener('click', () => startQuiz('matching'));
+            essayType.addEventListener('click', () => startQuiz('essay'));
+            
+            // Essay Submit
+                                  essaySubmit.addEventListener('click', submitEssay);
+
+            // Functions
+            function showCategorySelection() {
+                splashScreen.style.display = 'none';
+                categoryScreen.style.display = 'block';
+            }
+
+            function showQuizTypeSelection(category, categoryQuestions) {
+                selectedCategory = category;
+                questions = [...categoryQuestions];
+                
+                categoryScreen.style.display = 'none';
+                quizTypeScreen.style.display = 'block';
+            }
+
+            function startQuiz(type) {
+                // Reset state
+                currentQuestionIndex = 0;
+                score = 0;
+                selectedType = type;
+                matchingSelections = {};
+                
+                // Filter questions by type
+                questions = questions.filter(q => q.type === type);
+                
+                // Shuffle questions
+                questions.sort(() => Math.random() - 0.5);
+                
+                // Update UI
+                quizTypeScreen.style.display = 'none';
+                quizScreen.style.display = 'block';
+                
+                // Set category and type display
+                categoryDisplay.textContent = selectedCategory;
+                categoryDisplay.className = 'quiz-category';
+                
+                if (selectedCategory === 'Matematika') {
+                    categoryDisplay.classList.add('math');
+                } else if (selectedCategory === 'Biologi') {
+                    categoryDisplay.classList.add('bio');
+                } else if (selectedCategory === 'Sejarah') {
+                    categoryDisplay.classList.add('history');
+                } else if (selectedCategory === 'PJOK') {
+                    categoryDisplay.classList.add('pjok');
+                } else if (selectedCategory === 'PPKn') {
+                    categoryDisplay.classList.add('ppkn');
+                } else if (selectedCategory === 'Teknologi Informatika') {
+                    categoryDisplay.classList.add('ti');
+      }
+
+          typeDisplay.textContent = getTypeName(type);
+                typeDisplay.className = 'quiz-type ' + type;
+                
+                // Show/hide appropriate containers
+                optionsContainer.style.display = type === 'multiple' ? 'grid' : 'none';
+                matchingContainer.style.display = type === 'matching' ? 'flex' : 'none';
+                essayContainer.style.display = type === 'essay' ? 'flex' : 'none';
+                
+                // Load first question
+                loadQuestion();
+                
+                // Random event chance
+                if (Math.random() < randomEventChance) {
+                    setTimeout(showRandomEvent, 1000);
+                }
+            }
+
+            function getTypeName(type) {
+                switch(type) {
+                    case 'multiple': return 'Pilihan Ganda';
+                    case 'matching': return 'Menjodohkan';
+                    case 'essay': return 'Essay';
+                    default: return '';
+                }
+            }
+
+            function loadQuestion() {
+                if (currentQuestionIndex >= questions.length) {
+                    showResults();
+                    return;
+                }
+                
+                const currentQuestion = questions[currentQuestionIndex];
+                
+                // Update UI
+                questionText.textContent = currentQuestion.question;
+                scoreDisplay.textContent = score;
+                
+                // Update progress bar
+                const progress = ((currentQuestionIndex) / questions.length) * 100;
+                progressBar.style.width = `${progress}%`;
+                
+                // Load question based on type
+                if (selectedType === 'multiple') {
+                    loadMultipleChoiceQuestion(currentQuestion);
+                } else if (selectedType === 'matching') {
+                    loadMatchingQuestion(currentQuestion);
+                } else if (selectedType === 'essay') {
+                    loadEssayQuestion(currentQuestion);
+      }
+
+          // Random event chance
+                if (Math.random() < randomEventChance) {
+                    setTimeout(showRandomEvent, 2000);
+                }
+            }
+
+            function loadMultipleChoiceQuestion(question) {
+                // Clear previous options
+                optionsContainer.innerHTML = '';
+                
+                // Create option buttons
+                question.options.forEach((option, index) => {
+                    const optionBtn = document.createElement('button');
+                    optionBtn.classList.add('option-btn');
+                    optionBtn.textContent = option;
+                    optionBtn.addEventListener('click', () => selectMultipleChoiceOption(index));
+                    optionsContainer.appendChild(optionBtn);
+                });
+            }
+
+            function loadMatchingQuestion(question) {
+                // Clear previous matching items
+                matchingContainer.innerHTML = '';
+                
+                // Create matching items
+                question.leftItems.forEach((leftItem, index) => {
+                    const matchingItem = document.createElement('div');
+                    matchingItem.classList.add('matching-item');
+                    
+                    const leftDiv = document.createElement('div');
+                    leftDiv.classList.add('matching-left');
+                    leftDiv.textContent = leftItem;
+                    
+                    const rightDiv = document.createElement('div');
+                    rightDiv.classList.add('matching-right');
+                    
+                    // Shuffle right options
+                    const shuffledOptions = [...question.rightItems].sort(() => Math.random() - 0.5);
+                    
+                    shuffledOptions.forEach((rightOption, optionIndex) => {
+                        const option = document.createElement('div');
+                        option.classList.add('matching-option');
+                        option.textContent = rightOption;
+                        option.dataset.index = question.rightItems.indexOf(rightOption);
+                        option.addEventListener('click', () => selectMatchingOption(index, option));
+                        rightDiv.appendChild(option);
+                    });
+                    
+                    matchingItem.appendChild(leftDiv);
+                  matchingItem.appendChild(rightDiv);
+                    matchingContainer.appendChild(matchingItem);
+                });
+                
+                // Initialize matching selections
+                matchingSelections = {};
+            }
+
+            function loadEssayQuestion(question) {
+                // Clear previous essay input
+                essayInput.value = '';
+            }
+
+            function selectMultipleChoiceOption(selectedIndex) {
+                const currentQuestion = questions[currentQuestionIndex];
+                const optionBtns = optionsContainer.querySelectorAll('.option-btn');
+                
+                // Disable all buttons
+                optionBtns.forEach(btn => {
+                    btn.disabled = true;
+                    btn.style.cursor = 'default';
+                });
+                
+                // Check if answer is correct
+                if (selectedIndex === currentQuestion.correctAnswer) {
+                    optionBtns[selectedIndex].classList.add('correct');
+                    score += 10;
+                    scoreDisplay.textContent = score;
+                } else {
+                    optionBtns[selectedIndex].classList.add('wrong');
+                    optionBtns[currentQuestion.correctAnswer].classList.add('correct');
+                }
+                
+                // Move to next question
+                setTimeout(() => {
+                    currentQuestionIndex++;
+                    loadQuestion();
+                }, 1000);
+            }
+
+            function selectMatchingOption(leftIndex, optionElement) {
+                const rightIndex = parseInt(optionElement.dataset.index);
+                
+                // Remove previous selection for this left item
+                const previousSelection = matchingContainer.querySelectorAll(`.matching-option[data-left="${leftIndex}"]`);
+                previousSelection.forEach(el => {
+                    el.classList.remove('selected');
+                    el.dataset.left = '';
+                });
+                
+                // Add selection to current option
+          optionElement.classList.add('selected');
+                optionElement.dataset.left = leftIndex;
+                
+                // Store selection
+                matchingSelections[leftIndex] = rightIndex;
+                
+                // Check if all items are selected
+                if (Object.keys(matchingSelections).length === questions[currentQuestionIndex].leftItems.length) {
+                    // Check if all selections are correct
+                    const currentQuestion = questions[currentQuestionIndex];
+                    let allCorrect = true;
+                    
+                    for (let i = 0; i < currentQuestion.leftItems.length; i++) {
+                        if (matchingSelections[i] !== currentQuestion.correctMatches[i]) {
+                            allCorrect = false;
+                            break;
+                        }
+                    }
+                    
+                    if (allCorrect) {
+                        score += 10;
+                        scoreDisplay.textContent = score;
+                    }
+                    
+                    // Move to next question
+                    setTimeout(() => {
+                        currentQuestionIndex++;
+                        loadQuestion();
+                    }, 1000);
+                }
+            }
+
+            function submitEssay() {
+                const answer = essayInput.value.trim();
+                
+                if (answer === '') {
+                    alert('Silakan isi jawaban Anda terlebih dahulu!');
+                    return;
+                }
+                
+                // For demo purposes, we'll just give points for any answer
+                score += 10;
+                scoreDisplay.textContent = score;
+                
+                // Move to next question
+                setTimeout(() => {
+                    currentQuestionIndex++;
+                    loadQuestion();
+                }, 1000);
+                      }
+
+      function showRandomEvent() {
+                const event = randomEvents[Math.floor(Math.random() * randomEvents.length)];
+                
+                // Create random event element
+                const randomEventDiv = document.createElement('div');
+                randomEventDiv.classList.add('random-event');
+                
+                const contentDiv = document.createElement('div');
+                contentDiv.classList.add('random-event-content');
+                
+                const iconDiv = document.createElement('div');
+                iconDiv.classList.add('random-event-icon');
+                iconDiv.textContent = event.icon;
+                
+                const titleDiv = document.createElement('div');
+                titleDiv.classList.add('random-event-title');
+                titleDiv.textContent = event.title;
+                
+                const descriptionDiv = document.createElement('div');
+                descriptionDiv.classList.add('random-event-description');
+                descriptionDiv.textContent = event.description;
+                
+                const buttonDiv = document.createElement('button');
+                buttonDiv.classList.add('random-event-btn');
+                buttonDiv.textContent = 'Lanjutkan';
+                buttonDiv.addEventListener('click', () => {
+                    document.body.removeChild(randomEventDiv);
+                    event.effect();
+                });
+                
+                contentDiv.appendChild(iconDiv);
+                contentDiv.appendChild(titleDiv);
+                contentDiv.appendChild(descriptionDiv);
+                contentDiv.appendChild(buttonDiv);
+                randomEventDiv.appendChild(contentDiv);
+                
+                document.body.appendChild(randomEventDiv);
+            }
+
+            function showResults() {
+              // Update UI
+                quizScreen.style.display = 'none';
+                resultScreen.style.display = 'block';
+                finalScore.textContent = score;
+                
+                // Update progress bar to 100%
+                progressBar.style.width = '100%';
+                
+                // Set result message and emoji based on score
+                const maxScore = questions.length * 10;
+                const percentage = (score / maxScore) * 100;
+                
+                if (percentage >= 80) {
+                    resultMessage.textContent = `Luar biasa! Kamu ahli dalam ${selectedCategory}!`;
+                    resultEmoji.textContent = '🏆';
+                } else if (percentage >= 60) {
+                    resultMessage.textContent = `Bagus sekali! Kamu paham ${selectedCategory} dengan baik!`;
+                    resultEmoji.textContent = '👏';
+                } else if (percentage >= 40) {
+                    resultMessage.textContent = `Cukup baik, tapi bisa lebih baik dalam ${selectedCategory}!`;
+                    resultEmoji.textContent = '👍';
+                } else {
+                    resultMessage.textContent = `Jangan menyerah, belajar lebih giat tentang ${selectedCategory}!`;
+                    resultEmoji.textContent = '💪';
+                }
+            }
+
+            function resetQuiz() {
+                // Reset UI
+                resultScreen.style.display = 'none';
+                categoryScreen.style.display = 'block';
+                
+                // Reset progress bar
+                progressBar.style.width = '0%';
+            }
+        });
+    </script>
+</body>
+</html>
